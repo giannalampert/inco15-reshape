@@ -8,3 +8,59 @@ Repo(repository): a place wehre the VC keeps the project files and their history
 Branch: parallel version of the project 
 
 Lets put this up to github!
+
+```{r}
+library(tidyverse)
+```
+Cleaning long-form data 
+ -each observation is a row, each variable is a column 
+ -each column is a variable and each row is different 
+ - ex. each line represents a unique combination of country and year 
+
+Wide form data
+- plots can be harder to make
+```{r}
+gdp <- read_delim("../../data/oecd-gdp.csv.bz2")
+gdp %>% 
+  head()
+```
+```{r}
+gdpLong <- 
+  gdp %>% 
+  pivot_longer(!c(country, indicator),
+               names_to = "year",
+               values_to = "gdp")
+gdpLong %>% 
+  head(10)
+```
+```{r}
+gdpLong <- 
+  gdp %>% 
+  pivot_longer(!c(country, indicator),
+               names_to = "year",
+               values_to = "gdp") %>% 
+  mutate( year = as.numeric(year))
+gdpLong %>% 
+  head(10)
+```
+```{r}
+p <- data.frame(pregnate= c("yes", "no"),
+                male= c(NA, 25),
+                female= c(11, 18))
+p
+```
+```{r}
+pl <- p %>% 
+  pivot_longer(c(male, female),
+               names_to = "sex",
+               values_to = "count")
+pl
+```
+```{r}
+pl %>% 
+  pivot_wider(id_cols = pregnate, 
+              names_from = sex,
+              values_from = count)
+```
+
+
